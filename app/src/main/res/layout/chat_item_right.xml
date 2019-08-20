@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/sendmessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/getmessage"
+        android:layout_alignParentRight="true"
+
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_right"
+        android:elevation="3dp"
+        android:padding="8dp"
+        android:text="hello"
+        android:textColor="#FFFF"
+        android:textDirection="ltr"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/createget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/getmessage"
+        android:layout_marginLeft="3dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:inputType="time"
+        android:hint="" />
+
+    <TextView
+        android:id="@+id/getmessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_left"
+
+
+        android:elevation="3dp"
+        android:padding="8dp"
+        android:text="hello"
+        android:textColor="#000"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/createsend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendmessage"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:padding="5dp"
+        android:gravity="center"
+        android:inputType="time"
+        android:hint="" />
+
+</RelativeLayout>

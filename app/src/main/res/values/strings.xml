@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Chat Client App</string>
+    <string name="title_activity_userchat">Userchat</string>
+    <string name="title_activity_user_chat">User_chat</string>
+</resources>
