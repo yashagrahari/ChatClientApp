@@ -3,21 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginRight="80dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="3dp"
+    android:background="@drawable/background_left">
+
+
+
     <TextView
-        android:id="@+id/sendmessage"
+        android:id="@+id/getmessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_below="@+id/getmessage"
-        android:layout_alignParentRight="true"
-
-        android:layout_marginTop="10dp"
-        android:background="@drawable/background_right"
-        android:elevation="3dp"
+        android:background="@drawable/background_left"
         android:padding="8dp"
         android:text="hello"
-        android:textColor="#FFFF"
-        android:textDirection="ltr"
+        android:textColor="#000"
         android:textSize="18sp" />
 
     <TextView
@@ -25,35 +31,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/getmessage"
-        android:layout_marginLeft="3dp"
-        android:gravity="center"
+        android:layout_marginLeft="2dp"
+        android:gravity="bottom"
         android:padding="5dp"
+        android:textSize="10sp"
         android:inputType="time"
         android:hint="" />
+</LinearLayout>
 
-    <TextView
-        android:id="@+id/getmessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_left"
-
-
-        android:elevation="3dp"
-        android:padding="8dp"
-        android:text="hello"
-        android:textColor="#000"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/createsend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sendmessage"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:padding="5dp"
-        android:gravity="center"
-        android:inputType="time"
-        android:hint="" />
 
 </RelativeLayout>

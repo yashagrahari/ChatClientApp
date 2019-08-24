@@ -2,7 +2,6 @@ package com.example.chatclientapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,13 +19,19 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class activity_admin extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager lm;
     private AdminAdapter adapter;
-
+    String name="ADMIN";
+    List<UserAdminmessagesandactivity3> data;
     Gson gson=new Gson();
+    SPreference sPreference=new SPreference();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,9 @@ public class activity_admin extends AppCompatActivity {
         SharedPreferences sharedPreferences1 =getSharedPreferences("mydata",MODE_PRIVATE);
         String str2 = sharedPreferences1.getString("data","");
         Log.e("extra2",str2);
-        Type type=new TypeToken<List<Validation0>>() {
+        Type type=new TypeToken<List<UserAdminmessagesandactivity3>>() {
         }.getType();
-        List<Validation0> data=new Gson().fromJson(str2,type);
+        data=new Gson().fromJson(str2,type);
         Log.e("mydata2",gson.toJson(data));
 
         recyclerView = (RecyclerView) findViewById(R.id.recycle2);
@@ -68,11 +73,38 @@ public class activity_admin extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.Sign_in:
-                SPreference.setLoggedIn(getApplicationContext(), false);
+                sPreference.setLoggedIn(getApplicationContext(), false);
 
                 Intent b=new Intent(this,MainActivity.class);
                 startActivity(b);
                 finish();
+                break;
+
+            case R.id.refresh:
+
+                Api_interface api_interface = RetrofitClient.getClient(activity_admin.this).create(Api_interface.class);
+
+                api_interface.postInit3(name)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(a -> {
+                        })
+                        .doOnError(e -> Log.e("onError", gson.toJson(e)))
+                        .subscribe(response2 -> {
+                            data = response2;
+                            String str = gson.toJson(response2);
+                            Log.e("string", str);
+                            SharedPreferences sharedPreferences1=getSharedPreferences("mydata",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=sharedPreferences1.edit();
+                            editor.putString("data",gson.toJson(data));
+                            editor.apply();
+                            Intent a=new Intent(activity_admin.this,activity_admin.class);
+                            startActivity(a);
+                            finish();
+
+                        });
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

@@ -18,8 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
     EditText username, password;
     Button buttonlogin;
-    List<Validation0> responseData;
+    List<UserAdminmessagesandactivity3> responseData;
     Gson gson = new Gson();
+    SPreference sPreference=new SPreference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         buttonlogin = findViewById(R.id.buttonlogin);
+        Log.e("sir",sPreference.getLoggedStatus(getApplicationContext())+"");
 
-        if (SPreference.getLoggedStatus(getApplicationContext())) {
-
+        if (sPreference.getLoggedStatus(getApplicationContext())) {
+            Log.e("sir",SPreference.getLoggedStatus(getApplicationContext())+"");
             SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
             String str2 = sharedPreferences1.getString("data", "");
 
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+        sPreference.setLoggedIn(getApplicationContext(),true);
+//        Log.e("sirfsdgg",sPreference.getLoggedStatus(getApplicationContext())+"");
+
+
         buttonlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,9 +75,10 @@ public class MainActivity extends AppCompatActivity {
                     responseData = response;
                     String str=gson.toJson(response);
                     Log.e("string",str);
-                    if (str.contains("date")) {
+                    if (str.contains("date")||str.contains("cc")) {
 
-                        SPreference.setLoggedIn(getApplicationContext(),true);
+
+                        sPreference.setLoggedIn(getApplicationContext(),true);
                         SharedPreferences sharedPreferences=getSharedPreferences("mydata",MODE_PRIVATE);
                         SharedPreferences.Editor editor=sharedPreferences.edit();
                         editor.putString("data",str);
@@ -80,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                          a.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                          startActivity(a);
                          finish();
+//                         recreate();
 
                      }
                      else if (str.contains("unread"))

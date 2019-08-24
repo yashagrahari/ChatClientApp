@@ -4,9 +4,9 @@ package com.example.chatclientapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.http.DELETE;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-
 
     private List<Validation> mydata;
     public Context context;
@@ -66,7 +60,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
 
         if (mydata.get(position).getName().equalsIgnoreCase("user")) {
-            holder.show_message.setText(mydata.get(position).getMsg());
+
+            if(mydata.get(position).getStatus().equalsIgnoreCase("inserted")){
+                holder.show_message.setText(mydata.get(position).getMsg());
+
+            }else{
+                holder.show_message.setText("This message was deleted");
+            }
 
             String time=mydata.get(position).getDtoi();
 
@@ -77,10 +77,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
                     Log.e("time",time);
                 }
+
+            if(mydata.get(position).getStatus().equalsIgnoreCase("deleted")){
+                holder.show_message.setEnabled(false);
+            }
+            else {
+
                 holder.show_message.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
-                        android.app.AlertDialog.Builder builder=new AlertDialog.Builder(context);
+                        android.app.AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setCancelable(true)
                                 .setTitle("Delete")
                                 .setMessage("Are you sure you want to delete")
@@ -89,9 +95,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         Authbody4 authBody4 = new Authbody4();
                                         authBody4.setId(mydata.get(position).getId());
+                                        authBody4.setUser1(mydata.get(position).link1__username);
                                         Api_interface api_interface = RetrofitClient.getClient(context).create(Api_interface.class);
 
-                                        api_interface.analysis_delete_api10(mydata.get(position).getId())
+                                        api_interface.analysis_delete_api10(authBody4)
                                                 .subscribeOn(Schedulers.io())
                                                 .observeOn(AndroidSchedulers.mainThread())
                                                 .doOnSubscribe(a -> {
@@ -101,8 +108,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                                                     Delete s = response;
 
                                                 });
-                                        holder.createsendmessage.setVisibility(View.GONE);
-                                                    holder.show_message.setVisibility(View.GONE);
+                                        mydata.get(0).setMsg("This message was deleted");
+                                        holder.show_message.setText("This message was deleted");
+                                        holder.show_message.setEnabled(false);
+
+
+
 
                                     }
                                 })
@@ -113,10 +124,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                                     }
                                 }).show();
 
-
                         return false;
                     }
                 });
+            }
         } else {
             holder.getmessage.setText(mydata.get(position).getMsg());
 
@@ -133,11 +144,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
     @Override
     public int getItemCount() {
-            if(mydata.get(0).getName().equalsIgnoreCase("")){
-                return 0;
-            }else{
-                return mydata.size();
-            }
+                if(mydata.equals(null)){
+                    return 0;
+                }else {
+                    return mydata.size();
+                }
 
     }
 
@@ -166,6 +177,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
 
     }
+
+//    public  void updaterecyclerview(List<Validation> data1)
+//    {
+//
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+//        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+//        Log.e("data",gson.toJson(data1));
+//        linearLayoutManager.setStackFromEnd(true);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+//        MessageAdapter mAdapter = new MessageAdapter(data1,context);
+//        mAdapter.notifyDataSetChanged();
+//        recyclerView.setAdapter(mAdapter);
+//    }
 
 }
 

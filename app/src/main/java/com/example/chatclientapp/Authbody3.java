@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class Authbody3 {
 
 
-    @SerializedName("user_message")
+    @SerializedName("message")
     public String user_message;
 
     @SerializedName("name")

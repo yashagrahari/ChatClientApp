@@ -6,8 +6,8 @@
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">#1aa3ff</item>
-        <item name="android:statusBarColor">#1aa3ff</item>
+        <item name="colorAccent">#080F1A</item>
+        <item name="android:statusBarColor">#080F1A</item>
     </style>
 
 </resources>

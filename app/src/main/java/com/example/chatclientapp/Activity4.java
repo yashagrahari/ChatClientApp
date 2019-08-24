@@ -13,15 +13,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Toolbar;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -42,9 +37,15 @@ public class Activity4 extends AppCompatActivity {
     String name;
     String name2="admin";
     String text;
-    List<Validation0> responseData;
+    List<UserAdminmessagesandactivity3> responseData;
+    List<Validation> v5=new ArrayList<Validation>();
+    List<UserAdminmessagesandactivity3> responseData1=new ArrayList<UserAdminmessagesandactivity3>();
+    int flag=0;
+
+
 
     Gson gson = new Gson();
+    String valid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +61,31 @@ public class Activity4 extends AppCompatActivity {
 
 
 
-        Intent intent = getIntent();
-
-        String str2=intent.getStringExtra("Response"
-        );
-        Log.e("string",str2);
-        Type type=new TypeToken<List<Validation0>>() {
+//        Intent intent = getIntent();
+//
+//        String str2=intent.getStringExtra("Response"
+//        );
+//        Log.e("string",str2);
+//        Type type=new TypeToken<List<UserAdminmessagesandactivity3>>() {
+//        }.getType();
+//        responseData=new Gson().fromJson(str2,type);
+        SharedPreferences sharedPreferences=getSharedPreferences("mydata",MODE_PRIVATE);
+        String str2 = sharedPreferences.getString("data","");
+        Log.e("Transfer", str2);
+        Type type1 = new TypeToken<List<UserAdminmessagesandactivity3>>() {
         }.getType();
-        responseData=new Gson().fromJson(str2,type);
+        responseData = new Gson().fromJson(str2, type1);
+        if(str2.contains("date")){
+            List<Validation> v2=responseData.get(0).getData();
+            valid=v2.get(0).link1__username;
+            updatercyclerview(responseData);
+        }else{
+            valid=responseData.get(0).getCc();
+            responseData.remove(0);
+            updatercyclerview(responseData);
+        }
 
-        updatercyclerview(responseData);
+
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,12 +96,11 @@ public class Activity4 extends AppCompatActivity {
                     return;
                 }
 
-                List<Validation> valid=responseData.get(0).getData();
-                name=valid.get(0).getLink1__username();
+
 
                 Log.e("Usermessage",text);
                 Authbody3 authBody = new Authbody3();
-                authBody.setUsername(name);
+                authBody.setUsername(valid);
                 authBody.setName(name2);
                 authBody.setUser_message(text);
                 Api_interface api_interface = RetrofitClient.getClient(Activity4.this).create(Api_interface.class);
@@ -95,11 +110,69 @@ public class Activity4 extends AppCompatActivity {
                         .doOnSubscribe(a-> {})
                         .doOnError(e -> Log.e("onError",gson.toJson(e)))
                         .subscribe(response -> {
-                            responseData = response;
+                            List<Success> s = response;
                             String str = gson.toJson(response);
                             Log.e("string", str);
                             Log.e("response",gson.toJson(response));
-                            updatercyclerview(responseData);
+
+                            UserAdminmessagesandactivity3 v1=new UserAdminmessagesandactivity3("","","","","","","",null);
+
+                            Validation v=new Validation("","","","","","","","","","");
+
+                            v.setLink1__username("");
+                            v.setDtoi(s.get(0).getTime());
+                            v.setMsg(text);
+                            v.setStatus("INSERTED");
+                            v.setName("admin");
+                            v.setId(s.get(0).getId());
+                            v5.add(v);
+                            v1.setData(v5);
+                            if(str.contains("date")){
+                                v1.setDate("");
+                            }else
+                            {
+                                v1.setDate(s.get(0).getDate());
+                            }
+                            if(str2.contains("cc")){
+                                responseData.clear();
+                            }
+                            else {
+                                if(responseData1.size()==0){
+                                    Log.e("uparyash",gson.toJson(responseData1));
+                                    Log.e("uparyash2",gson.toJson(v1));
+                                    responseData1.add(v1);
+                                    Log.e("yash",gson.toJson(responseData1));
+                                }else{
+                                    int l=gson.toJson(responseData1).length();
+                                    Log.e("length",l+"");
+                                    Log.e("yash",gson.toJson(responseData1));
+                                    Log.e("yashg",gson.toJson(responseData1));
+
+                                    responseData1.add(v1);
+                                    Log.e("Afteradding",gson.toJson(responseData1));
+
+                                }
+                            }
+
+                            Log.e("res",gson.toJson(responseData));
+                            String n=gson.toJson(responseData);
+                            SharedPreferences sharedPreferences1=getSharedPreferences("mydata",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=sharedPreferences1.edit();
+                            editor.putString("data",n);
+                            editor.apply();
+                            if(str2.contains("cc")) {
+                                updatercyclerview(responseData);
+                            }
+                            else {
+
+                                responseData.get(0).getData().add(responseData1.get(0).getData().get(flag));
+                                responseData1.clear();
+                                flag=flag+1;
+                                Log.e("harsh",gson.toJson(responseData1));
+                                updatercyclerview(responseData);
+
+                            }
+                            Log.e("resesd",gson.toJson(responseData));
 
                         });
 
@@ -110,7 +183,7 @@ public class Activity4 extends AppCompatActivity {
     }
 
 
-    public void updatercyclerview (List<Validation0> mydata){
+    public void updatercyclerview (List<UserAdminmessagesandactivity3> mydata){
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Activity4.this);
@@ -118,7 +191,7 @@ public class Activity4 extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         Log.e("json",gson.toJson(mydata));
         recyclerView.setLayoutManager(linearLayoutManager);
-        ParentAdminMessageAdapter mAdapter = new ParentAdminMessageAdapter(responseData,getApplicationContext());
+        ParentAdminMessageAdapter mAdapter = new ParentAdminMessageAdapter(responseData,Activity4.this);
         mAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(mAdapter);
         editText.setText("");
@@ -130,7 +203,7 @@ public class Activity4 extends AppCompatActivity {
         super.onBackPressed();
 
         AuthBody authBody = new AuthBody();
-        authBody.setUsername("admin");
+        authBody.setUsername("ADMIN");
         authBody.setPassword("12345");
         Log.e("ButtonP", gson.toJson(authBody));
 
@@ -151,7 +224,6 @@ public class Activity4 extends AppCompatActivity {
                     editor.putString("data",str);
                     editor.apply();
                     Intent a = new Intent(this, activity_admin.class);
-//                    a.putExtra("Response", str);
                     Log.e("extra",str);
                     a.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(a);
@@ -160,4 +232,40 @@ public class Activity4 extends AppCompatActivity {
                 });
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.refresh:
+                Api_interface api_interface = RetrofitClient.getClient(Activity4.this).create(Api_interface.class);
+
+                api_interface.postInit2(valid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(a -> {
+                        })
+                        .doOnError(e -> Log.e("onError", gson.toJson(e)))
+                        .subscribe(response2 -> {
+                            responseData = response2;
+                            String str = gson.toJson(response2);
+                            Log.e("string", str);
+                            SharedPreferences sharedPreferences1=getSharedPreferences("mydata",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=sharedPreferences1.edit();
+                            editor.putString("data",gson.toJson(responseData));
+                            editor.apply();
+
+                            updatercyclerview(responseData);
+                        });
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

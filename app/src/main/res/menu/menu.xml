@@ -9,4 +9,12 @@
         android:title="Log out"
         app:showAsAction="never"/>
 
+
+
+
+    <item android:id="@+id/refresh"
+        android:title="refresh"
+        android:enabled="true"
+        android:icon="@drawable/baseline_replay_black_18dp"
+        app:showAsAction="always"/>
 </menu>

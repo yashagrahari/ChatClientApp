@@ -2,7 +2,6 @@ package com.example.chatclientapp;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +12,18 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 public class ParentAdapter_Message extends RecyclerView.Adapter<ParentAdapter_Message.ViewHolder> {
 
 
-    List<Validation0> data1;
+    List<UserAdminmessagesandactivity3> data1;
     Context context;
+    Gson gson=new Gson();
 
-    public ParentAdapter_Message(List<Validation0> data1,Context context) {
+    public ParentAdapter_Message(List<UserAdminmessagesandactivity3> data1, Context context) {
         this.data1 = data1;
         this.context=context;
     }
@@ -39,16 +41,14 @@ public class ParentAdapter_Message extends RecyclerView.Adapter<ParentAdapter_Me
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull ParentAdapter_Message.ViewHolder holder, int position) {
-
         holder.date.setText(data1.get(position).getDate());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         linearLayoutManager.setStackFromEnd(true);
         holder.recyclerView.setLayoutManager(linearLayoutManager);
-        MessageAdapter mAdapter = new MessageAdapter(data1.get(position).getData());
+        MessageAdapter mAdapter = new MessageAdapter(data1.get(position).getData(),context);
         mAdapter.notifyDataSetChanged();
         holder.recyclerView.setAdapter(mAdapter);
-//        editText.setText("");
 
 
 
@@ -56,7 +56,14 @@ public class ParentAdapter_Message extends RecyclerView.Adapter<ParentAdapter_Me
 
     @Override
     public int getItemCount() {
-        return data1.size();
+        if(data1.contains(null))
+        {
+            return 0;
+        }else
+        {
+            return data1.size();
+        }
+
     }
 
 

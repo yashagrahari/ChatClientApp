@@ -3,6 +3,7 @@ package com.example.chatclientapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,17 +21,19 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.ViewHolder> {
 
-    public List<Validation0> mydata2;
+    public List<UserAdminmessagesandactivity3> mydata2;
     public Context context;
 
-    List<Validation0> responseData2;
+    List<UserAdminmessagesandactivity3> responseData2;
 
     Gson gson = new Gson();
 
-    public AdminAdapter(List<Validation0> mydata2, Context context) {
+    public AdminAdapter(List<UserAdminmessagesandactivity3> mydata2, Context context) {
         this.mydata2 = mydata2;
         Log.e("mdata",gson.toJson(mydata2));
         this.context = context;
@@ -72,8 +75,10 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminAdapter.ViewHolder> 
                             a.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                            a.putExtra("Response",str);
+                            SharedPreferences sharedPreferences1=context.getSharedPreferences("mydata",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=sharedPreferences1.edit();
+                            editor.putString("data",str);
+                            editor.apply();
                             Log.e("response",gson.toJson(response2));
                             context.startActivity(a);
                             ((Activity)context).finish();

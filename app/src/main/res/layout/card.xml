@@ -62,12 +62,13 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="40dp"
-                    android:layout_marginTop="-15dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="-14dp"
+                    android:layout_marginEnd="13dp"
+                    android:layout_marginRight="13dp"
                     android:background="@drawable/sendbutton"
                     android:gravity="center"
                     android:hint="0"
+                    android:textColor="#fff"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -78,11 +79,8 @@
                     android:layout_row="1"
                     android:layout_column="0"
                     android:layout_alignParentEnd="true"
-
-
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
-
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="44dp"
                     android:layout_marginRight="54dp"

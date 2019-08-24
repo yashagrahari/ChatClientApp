@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Validation0 {
+public class UserAdminmessagesandactivity3 {
 
     @SerializedName("date")
     public String date;
@@ -16,6 +16,12 @@ public class Validation0 {
     @SerializedName("password")
     public String password;
 
+    @SerializedName("cc")
+    public String cc;
+
+    @SerializedName("kk")
+    public String kk;
+
 
 
 
@@ -25,8 +31,7 @@ public class Validation0 {
     @SerializedName("mobileno")
     public String mobileno;
 
-    @SerializedName("kk")
-    public String kk;
+
 
     @SerializedName("unread")
     public String unread;
@@ -39,14 +44,31 @@ public class Validation0 {
         this.password = password;
     }
 
-    public Validation0(String password, String username, String mobileno, String kk, String unread, String date, List<Validation> data) {
+    public String getCc() {
+        return cc;
+    }
+
+    public void setCc(String cc) {
+        this.cc = cc;
+    }
+
+    public String getKk() {
+        return kk;
+    }
+
+    public void setKk(String kk) {
+        this.kk = kk;
+    }
+
+    public UserAdminmessagesandactivity3(String kk, String password, String username, String mobileno, String cc, String unread, String date, List<Validation> data) {
         this.username = username;
         this.mobileno = mobileno;
         this.password = password;
-        this.kk = kk;
+        this.kk=kk;
         this.unread = unread;
         this.date = date;
         this.data = data;
+        this.cc=cc;
     }
 
     public String getUsername() {
@@ -65,13 +87,7 @@ public class Validation0 {
         this.mobileno = mobileno;
     }
 
-    public String getKk() {
-        return kk;
-    }
 
-    public void setKk(String kk) {
-        this.kk = kk;
-    }
 
     public String getUnread() {
         return unread;
