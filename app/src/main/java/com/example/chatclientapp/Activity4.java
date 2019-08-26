@@ -30,17 +30,16 @@ import io.reactivex.schedulers.Schedulers;
 public class Activity4 extends AppCompatActivity {
 
 
-    private  Toolbar toolbar;
-    private RecyclerView recyclerView;
+     RecyclerView recyclerView;
     ImageButton imageButton;
     EditText editText;
     String name;
     String name2="admin";
     String text;
     List<UserAdminmessagesandactivity3> responseData;
-    List<Validation> v5=new ArrayList<Validation>();
-    List<UserAdminmessagesandactivity3> responseData1=new ArrayList<UserAdminmessagesandactivity3>();
-    int flag=0;
+    SPreference sPreference = new SPreference();
+    SharedPreferences sharedPreferences;
+    String str2;
 
 
 
@@ -59,29 +58,23 @@ public class Activity4 extends AppCompatActivity {
         imageButton=findViewById(R.id.sent);
         editText=findViewById(R.id.messagenew);
 
-
-
-//        Intent intent = getIntent();
-//
-//        String str2=intent.getStringExtra("Response"
-//        );
-//        Log.e("string",str2);
-//        Type type=new TypeToken<List<UserAdminmessagesandactivity3>>() {
-//        }.getType();
-//        responseData=new Gson().fromJson(str2,type);
-        SharedPreferences sharedPreferences=getSharedPreferences("mydata",MODE_PRIVATE);
-        String str2 = sharedPreferences.getString("data","");
+         sharedPreferences=getSharedPreferences("mydata",MODE_PRIVATE);
+         str2 = sharedPreferences.getString("data","");
         Log.e("Transfer", str2);
         Type type1 = new TypeToken<List<UserAdminmessagesandactivity3>>() {
         }.getType();
         responseData = new Gson().fromJson(str2, type1);
         if(str2.contains("date")){
-            List<Validation> v2=responseData.get(0).getData();
+            List<MessageData> v2=responseData.get(0).getData();
             valid=v2.get(0).link1__username;
             updatercyclerview(responseData);
         }else{
             valid=responseData.get(0).getCc();
             responseData.remove(0);
+            SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences1.edit();
+            editor.putString("data", gson.toJson(responseData));
+            editor.apply();
             updatercyclerview(responseData);
         }
 
@@ -90,6 +83,14 @@ public class Activity4 extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                sharedPreferences=getSharedPreferences("mydata",MODE_PRIVATE);
+                str2 = sharedPreferences.getString("data","");
+                Log.e("Transfer", str2);
+                Type type1 = new TypeToken<List<UserAdminmessagesandactivity3>>() {
+                }.getType();
+                responseData = new Gson().fromJson(str2, type1);
                 text=editText.getText().toString();
                 if(text.equals(""))
                 {
@@ -111,68 +112,52 @@ public class Activity4 extends AppCompatActivity {
                         .doOnError(e -> Log.e("onError",gson.toJson(e)))
                         .subscribe(response -> {
                             List<Success> s = response;
-                            String str = gson.toJson(response);
-                            Log.e("string", str);
-                            Log.e("response",gson.toJson(response));
-
-                            UserAdminmessagesandactivity3 v1=new UserAdminmessagesandactivity3("","","","","","","",null);
-
-                            Validation v=new Validation("","","","","","","","","","");
-
-                            v.setLink1__username("");
-                            v.setDtoi(s.get(0).getTime());
-                            v.setMsg(text);
-                            v.setStatus("INSERTED");
-                            v.setName("admin");
-                            v.setId(s.get(0).getId());
-                            v5.add(v);
-                            v1.setData(v5);
-                            if(str.contains("date")){
-                                v1.setDate("");
-                            }else
-                            {
-                                v1.setDate(s.get(0).getDate());
+                            if(responseData.size()==0){
+                                List<MessageData> mData = new ArrayList<>();
+                                MessageData message = new MessageData(text,name2,valid,"","","","",s.get(0).getTime(),s.get(0).getId(),"INSERTED");
+                                mData.add(message);
+                                UserAdminmessagesandactivity3 msgDataList = new UserAdminmessagesandactivity3("","","","","","",response.get(0).getDate(),mData);
+                                responseData.add(msgDataList);
+                                SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences1.edit();
+                                editor.putString("data", gson.toJson(responseData));
+                                editor.apply();
+                                updatercyclerview(responseData);
                             }
-                            if(str2.contains("cc")){
-                                responseData.clear();
-                            }
-                            else {
-                                if(responseData1.size()==0){
-                                    Log.e("uparyash",gson.toJson(responseData1));
-                                    Log.e("uparyash2",gson.toJson(v1));
-                                    responseData1.add(v1);
-                                    Log.e("yash",gson.toJson(responseData1));
+                            else{
+                                if(responseData.get(responseData.size()-1).getDate().equals(s.get(0).getDate())){
+                                    List<MessageData> mData = new ArrayList<>();
+                                    MessageData message = new MessageData(text,name2,"",valid,"","","",s.get(0).getTime(),s.get(0).getId(),"INSERTED");
+                                    mData.add(message);
+                                    responseData.get(responseData.size() - 1).getData().add(message);
+                                    SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences1.edit();
+                                    editor.putString("data", gson.toJson(responseData));
+                                    editor.apply();
+                                    updatercyclerview(responseData);
                                 }else{
-                                    int l=gson.toJson(responseData1).length();
-                                    Log.e("length",l+"");
-                                    Log.e("yash",gson.toJson(responseData1));
-                                    Log.e("yashg",gson.toJson(responseData1));
+                                    Api_interface api_interface1 = RetrofitClient.getClient(Activity4.this).create(Api_interface.class);
 
-                                    responseData1.add(v1);
-                                    Log.e("Afteradding",gson.toJson(responseData1));
-
+                                    api_interface1.postInit3(valid)
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .doOnSubscribe(a -> {
+                                            })
+                                            .doOnError(e -> Log.e("onError", gson.toJson(e)))
+                                            .subscribe(response2 -> {
+                                                responseData = response2;
+                                                String str1 = gson.toJson(response2);
+                                                Log.e("string", str1);
+                                                SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sharedPreferences1.edit();
+                                                editor.putString("data", gson.toJson(responseData));
+                                                editor.apply();
+                                                updatercyclerview(responseData);
+                                                return;
+                                            });
                                 }
                             }
 
-                            Log.e("res",gson.toJson(responseData));
-                            String n=gson.toJson(responseData);
-                            SharedPreferences sharedPreferences1=getSharedPreferences("mydata",MODE_PRIVATE);
-                            SharedPreferences.Editor editor=sharedPreferences1.edit();
-                            editor.putString("data",n);
-                            editor.apply();
-                            if(str2.contains("cc")) {
-                                updatercyclerview(responseData);
-                            }
-                            else {
-
-                                responseData.get(0).getData().add(responseData1.get(0).getData().get(flag));
-                                responseData1.clear();
-                                flag=flag+1;
-                                Log.e("harsh",gson.toJson(responseData1));
-                                updatercyclerview(responseData);
-
-                            }
-                            Log.e("resesd",gson.toJson(responseData));
 
                         });
 

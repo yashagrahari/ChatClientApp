@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.util.List;
 
 
-public class Validation {
+public class MessageData {
 
     @SerializedName("message")
     public String msg;
@@ -54,7 +54,7 @@ public class Validation {
         this.status = status;
     }
 
-    public Validation(String msg, String name, String link1__username, String username, String mobileno, String kk, String unread, String dtoi, String id, String status) {
+    public MessageData(String msg, String name, String link1__username, String username, String mobileno, String kk, String unread, String dtoi, String id, String status) {
 
         this.msg = msg;
         this.name = name;

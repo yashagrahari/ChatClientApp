@@ -2,6 +2,7 @@ package com.example.chatclientapp;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,22 +42,28 @@ public class ParentAdapter_Message extends RecyclerView.Adapter<ParentAdapter_Me
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBindViewHolder(@NonNull ParentAdapter_Message.ViewHolder holder, int position) {
+        Log.e("parent"+position,gson.toJson(data1.get(position)));
         holder.date.setText(data1.get(position).getDate());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         linearLayoutManager.setStackFromEnd(true);
         holder.recyclerView.setLayoutManager(linearLayoutManager);
-        MessageAdapter mAdapter = new MessageAdapter(data1.get(position).getData(),context);
-        mAdapter.notifyDataSetChanged();
+        MessageAdapter mAdapter = new MessageAdapter(data1.get(position).getData(),context,position);
+//        mAdapter.notifyDataSetChanged();
         holder.recyclerView.setAdapter(mAdapter);
-
-
 
     }
 
+    public void refreshData (List<UserAdminmessagesandactivity3> data1) {
+        this.data1 = data1;
+        notifyDataSetChanged();
+    }
+
+
+
     @Override
     public int getItemCount() {
-        if(data1.contains(null))
+        if(data1.size()==0)
         {
             return 0;
         }else

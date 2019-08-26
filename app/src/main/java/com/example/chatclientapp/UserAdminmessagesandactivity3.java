@@ -11,7 +11,7 @@ public class UserAdminmessagesandactivity3 {
 
 
     @SerializedName("data")
-    public List<Validation> data;
+    public List<MessageData> data;
 
     @SerializedName("password")
     public String password;
@@ -60,7 +60,7 @@ public class UserAdminmessagesandactivity3 {
         this.kk = kk;
     }
 
-    public UserAdminmessagesandactivity3(String kk, String password, String username, String mobileno, String cc, String unread, String date, List<Validation> data) {
+    public UserAdminmessagesandactivity3(String kk, String password, String username, String mobileno, String cc, String unread, String date, List<MessageData> data) {
         this.username = username;
         this.mobileno = mobileno;
         this.password = password;
@@ -105,11 +105,11 @@ public class UserAdminmessagesandactivity3 {
         this.date = date;
     }
 
-    public List<Validation> getData() {
+    public List<MessageData> getData() {
         return data;
     }
 
-    public void setData(List<Validation> data) {
+    public void setData(List<MessageData> data) {
         this.data = data;
     }
 }

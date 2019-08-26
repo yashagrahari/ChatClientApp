@@ -27,7 +27,7 @@ public interface Api_interface {
 
 //    @FormUrlEncoded
     @HTTP(method = "DELETE", path = "chat1/delete/", hasBody = true)
-    Observable<Delete> analysis_delete_api10(@Body Authbody4 authbody4);
+    Observable<List<UserAdminmessagesandactivity3>> analysis_delete_api10(@Body Authbody4 authbody4);
 
     @GET("chat1/refresh/")
     Observable<List<UserAdminmessagesandactivity3>> postInit3(@Query("user1") String username);

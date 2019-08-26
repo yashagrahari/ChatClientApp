@@ -74,6 +74,9 @@ public class activity_admin extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.Sign_in:
                 sPreference.setLoggedIn(getApplicationContext(), false);
+                SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = sharedPreferences1.edit();
+                editor1.clear();
 
                 Intent b=new Intent(this,MainActivity.class);
                 startActivity(b);
@@ -94,8 +97,8 @@ public class activity_admin extends AppCompatActivity {
                             data = response2;
                             String str = gson.toJson(response2);
                             Log.e("string", str);
-                            SharedPreferences sharedPreferences1=getSharedPreferences("mydata",MODE_PRIVATE);
-                            SharedPreferences.Editor editor=sharedPreferences1.edit();
+                            SharedPreferences sharedPreferences=getSharedPreferences("mydata",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putString("data",gson.toJson(data));
                             editor.apply();
                             Intent a=new Intent(activity_admin.this,activity_admin.class);

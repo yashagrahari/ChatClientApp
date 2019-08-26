@@ -1,6 +1,7 @@
 package com.example.chatclientapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,8 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
+
 import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -20,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     Button buttonlogin;
     List<UserAdminmessagesandactivity3> responseData;
     Gson gson = new Gson();
-    SPreference sPreference=new SPreference();
+    SPreference sPreference = new SPreference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         buttonlogin = findViewById(R.id.buttonlogin);
-        Log.e("sir",sPreference.getLoggedStatus(getApplicationContext())+"");
+        Log.e("sir", sPreference.getLoggedStatus(getApplicationContext()) + "");
 
         if (sPreference.getLoggedStatus(getApplicationContext())) {
-            Log.e("sir",SPreference.getLoggedStatus(getApplicationContext())+"");
-            SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
+            Log.e("sir", SPreference.getLoggedStatus(getApplicationContext()) + "");
+            SharedPreferences sharedPreferences1 = getSharedPreferences(Constants.RESPONSE_DATA, MODE_PRIVATE);
             String str2 = sharedPreferences1.getString("data", "");
 
             if (str2.contains("unread")) {
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-        sPreference.setLoggedIn(getApplicationContext(),true);
+        sPreference.setLoggedIn(getApplicationContext(), true);
 //        Log.e("sirfsdgg",sPreference.getLoggedStatus(getApplicationContext())+"");
 
 
@@ -69,60 +73,53 @@ public class MainActivity extends AppCompatActivity {
         api_interface.postInit(authBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(a-> {})
-                .doOnError(e -> Log.e("onError",gson.toJson(e)))
+                .doOnSubscribe(a -> {
+                })
+                .doOnError(e -> Log.e("onError", gson.toJson(e)))
                 .subscribe(response -> {
                     responseData = response;
-                    String str=gson.toJson(response);
-                    Log.e("string",str);
-                    if (str.contains("date")||str.contains("cc")) {
+                    String str = gson.toJson(response);
+                    Log.e("string", str);
+                    if (str.contains("date") || str.contains("cc")) {
 
 
-                        sPreference.setLoggedIn(getApplicationContext(),true);
-                        SharedPreferences sharedPreferences=getSharedPreferences("mydata",MODE_PRIVATE);
-                        SharedPreferences.Editor editor=sharedPreferences.edit();
-                        editor.putString("data",str);
+                        sPreference.setLoggedIn(getApplicationContext(), true);
+                        SharedPreferences sharedPreferences = getSharedPreferences(Constants.RESPONSE_DATA, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("data", str);
                         editor.apply();
-                         Intent a = new Intent(this, User_chat.class);
-                         Log.e("string2",str);
-                         a.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                         startActivity(a);
-                         finish();
-//                         recreate();
+                        Intent a = new Intent(this, User_chat.class);
+                        Log.e("string2", str);
+                        a.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(a);
+                        finish();
 
-                     }
-                     else if (str.contains("unread"))
-                     {
-                         SPreference.setLoggedIn(getApplicationContext(),true);
-                         SharedPreferences sharedPreferences1=getSharedPreferences("mydata",MODE_PRIVATE);
-                         SharedPreferences.Editor editor=sharedPreferences1.edit();
-                         editor.putString("data",str);
-                         editor.apply();
-                         Intent a = new Intent(this, activity_admin.class);
-//                         a.putExtra("Response", str);
-                         Log.e("extra",str);
-                         a.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                         startActivity(a);
-                         finish();
-                     }
-                     else if (str.contains("kk"))
-                         {
+                    } else if (str.contains("unread")) {
+                        sPreference.setLoggedIn(getApplicationContext(), true);
+                        SharedPreferences sharedPreferences1 = getSharedPreferences("mydata", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences1.edit();
+                        editor.putString("data", str);
+                        editor.apply();
+                        Intent a = new Intent(this, activity_admin.class);
+                        Log.e("extra", str);
+                        a.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(a);
+                        finish();
+                    } else if (str.contains("kk")) {
 
-                         Toast.makeText(this,"Username invalid ",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Username invalid ", Toast.LENGTH_LONG).show();
 
-                     }
-                     else if (str.contains("password"))
-                     {
+                    } else if (str.contains("password")) {
 
-                         Toast.makeText(this,"Password invalid ",Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Password invalid ", Toast.LENGTH_LONG).show();
 
-                     }
+                    }
 
 
-                    Log.e("response",gson.toJson(response));
-                }, e-> {
+                    Log.e("response", gson.toJson(response));
+                }, e -> {
                     e.printStackTrace();
-                    Toast.makeText(this," Server under Maintenance",Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, " Server under Maintenance", Toast.LENGTH_LONG).show();
 
                 });
 

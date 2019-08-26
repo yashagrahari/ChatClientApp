@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import static com.example.chatclientapp.SharedPreference.LOGGED_IN_PREF;
 
 
 public class SPreference {

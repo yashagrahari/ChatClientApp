@@ -59,10 +59,15 @@ public class ParentAdminMessageAdapter extends RecyclerView.Adapter<ParentAdminM
              mAdapter = new AdminMessageAdapter(data1.get(position).getData(),context);
             mAdapter.notifyDataSetChanged();
             holder.recyclerView.setAdapter(mAdapter);
+//            notifyDataSetChanged();
         }
 
 
     }
+
+//    public void refresh () {
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public int getItemCount() {
